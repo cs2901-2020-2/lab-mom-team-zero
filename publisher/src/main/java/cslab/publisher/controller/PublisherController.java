@@ -1,5 +1,4 @@
 package cslab.publisher.controller;
-import cslab.publisher.config.MessageConfig;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

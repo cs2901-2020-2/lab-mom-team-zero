@@ -1,7 +1,10 @@
 package cs.lab.subscriber.config;
 import org.springframework.amqp.core.*;
+import cs.lab.subscriber.Receiver;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 
@@ -9,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+//import javax.sound.midi.Receiver;
 
 
 @Configuration
@@ -29,8 +33,8 @@ public class MessageConfig {
 
     @Bean
     public Queue queue(){
-        return new Queue(QUEUE);
-        //return new AnonymousQueue();
+        //return new Queue(QUEUE);
+        return new AnonymousQueue();
     }
 
 
@@ -55,20 +59,18 @@ public class MessageConfig {
         return BindingBuilder.bind(queue2).to(fanout);
     }
 
-    /*
-
     @Bean
-    public MessageConverter converter(){
-        return new Jackson2JsonMessageConverter();
+    MessageListenerAdapter listenerAdapter(Receiver receiver) {
+        return new MessageListenerAdapter(receiver, "receiveMessage");
     }
-*/
-   /* @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory){
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(converter());
-        return rabbitTemplate;
+    @Bean
+    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
+                                             MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames(QUEUE);
+        container.setMessageListener(listenerAdapter);
+        return container;
     }
-
-    */
 }
 
