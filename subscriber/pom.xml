@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cs.lab</groupId>
-    <artifactId>subscriber</artifactId>
+    <artifactId>lab-mom-team-zero-subscriber</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>subscriber</name>
+    <name>lab-mom-team-zero-subscriber</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
