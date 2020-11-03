@@ -1,22 +1,37 @@
 package cslab.publisher.controller;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import cslab.publisher.config.MessageConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping(path = "/publish")
 public class PublisherController {
 
-    // @Autowired
-//    private RabbitTemplate template = new RabbitTemplate();
-
-    // @Autowired
-    private FanoutExchange fanout = new FanoutExchange(MessageConfig.EXCHANGE);
+    private static final String EXCHANGE_NAME = "fanout";
 
     @PostMapping(path = "/message/{message}")
-    public @ResponseBody String message(@PathVariable String message){
-        RabbitTemplate template = new RabbitTemplate();
-        template.convertAndSend(fanout.getName() , "", message);
+    public @ResponseBody String message(@PathVariable String message) throws IOException, TimeoutException {
+//        ConnectionFactory factory = new ConnectionFactory();
+//        factory.setHost("localhost");
+//        factory.setPort(8080);
+//
+//        try(
+//        Connection conn = factory.newConnection();
+//        Channel channel = conn.createChannel()) {
+//            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+//
+//            String queueName = channel.queueDeclare().getQueue();
+//
+//            channel.queueBind(queueName, EXCHANGE_NAME, "");
+//
+//            channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
+//        }
         return "Success!!";
     }
 }
