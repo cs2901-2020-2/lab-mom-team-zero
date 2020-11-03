@@ -1,6 +1,5 @@
 package cslab.publisher.controller;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import cslab.publisher.config.MessageConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,14 +7,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/publish")
 public class PublisherController {
 
-    @Autowired
-    private RabbitTemplate template;
+    // @Autowired
+//    private RabbitTemplate template = new RabbitTemplate();
 
-    @Autowired
-    private FanoutExchange fanout;
+    // @Autowired
+    private FanoutExchange fanout = new FanoutExchange(MessageConfig.EXCHANGE);
 
     @PostMapping(path = "/message/{message}")
     public @ResponseBody String message(@PathVariable String message){
+        RabbitTemplate template = new RabbitTemplate();
         template.convertAndSend(fanout.getName() , "", message);
         return "Success!!";
     }
