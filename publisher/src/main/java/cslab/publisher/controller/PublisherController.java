@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 @RequestMapping(path = "/publish")
 public class PublisherController {
 
-    private static final String EXCHANGE_NAME = "fanout";
+    private static final String EXCHANGE_NAME = "logs";
 
     @PostMapping(path = "/message/{message}")
     public @ResponseBody String message(@PathVariable String message) throws IOException, TimeoutException {
@@ -21,7 +21,6 @@ public class PublisherController {
         try (Connection conn = factory.newConnection();
              Channel channel = conn.createChannel()) {
             channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-
             channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
         }
         return "Success!!";
